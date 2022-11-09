@@ -1,0 +1,56 @@
+{% extends 'index.html' %}
+{% block content %}
+<link rel="stylesheet" href="/static/css/room.css">
+<div class="container-xl pt-3 pb-5">
+  <div class="row">
+    <div class="col-md-4 pt-2 pb-2">
+      <a href="/rooms/new" class="btn btn-main w-100">{{ local.c_r }}</a>
+      {% if used %}
+      <h6 class="mt-2 mb-0 muted-color text-end">
+        <small><i class="fa-solid fa-database me-1"></i>{{ used }}%</small>
+      </h6>
+      {% endif %}
+    </div>
+    <div class="col-md-8 pt-2">
+      {% if rooms|length > 0 %}
+      {% for room in rooms %}
+      <div class="rooms-card mb-3 rounded">
+        <div class="row p-3 position-relative">
+          <a href="/rooms/{{ room.name }}" class="stretched-link"></a>
+          <div class="col-sm-2 text-center">
+            <img src="{% if room.recipient_avatar != '' %}/media/{{ room.recipient_avatar }}{% else %}/static/images/avatar.png{% endif %}" class="rounded-circle rooms-avatar">
+          </div>
+          <div class="col-sm-9">
+            <h2 class="fw-bold mt-1 mb-0">{{ room.recipient }}</h2>
+            {% if room.message_count %}<div class="muted-color"><small>{{ local.m_s }}: {{ room.message_count }}{% if room.unread_count %};<span class="ms-1 text-danger">{{ local.u_d }}: {{ room.unread_count }}</span>{% endif %}</small></div>{% endif %}
+          </div>
+          <div class="col-sm-1 d-flex align-items-end justify-content-end">
+            <button class="btn-icon delete-room-btn" data-bs-toggle="modal" data-bs-target="#delete-room-{{ room.name }}">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        </div>
+        <div id="delete-room-{{ room.name }}" class="modal delete-room-modal fade" tabindex="-1">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0">
+              <div class="modal-header border-0">
+                <h5 class="modal-title text-danger">{{ local.d_r }}?</h5>
+                <button class="btn-icon" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
+              </div>
+              <div class="modal-body">
+                <form method="post">
+                  {% csrf_token %}
+                  <h3 class="text-center mb-4">{{ room.recipient }}</h3>
+                  <button type="submit" name="delete-room" value="{{ room.name }}" class="btn btn-main w-100">{{ local.d_r }}</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

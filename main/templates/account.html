@@ -1,0 +1,66 @@
+{% extends 'index.html' %}
+{% block content %}
+<div class="container-xl pt-5 pb-5">
+  <div class="text-center">
+    <img src="{% if request.user.avatar != '' %}/media/{{ request.user.avatar }}{% else %}/static/images/avatar.png{% endif %}" class="rounded-circle account-avatar" data-bs-toggle="modal" data-bs-target="#avatar-modal">
+    <h2 class="fw-bold pt-3 d-flex justify-content-center">
+      {{ request.user.username }}
+      <button class="btn-text ms-2" data-bs-toggle="modal" data-bs-target="#username-modal"><i class="fa-solid fa-pen"></i></button>
+    </h2>
+  </div>
+</div>
+<div id="avatar-modal" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0">
+      <div class="modal-header border-0">
+        <h5 class="modal-title">{{ local.a_r }}</h5>
+        <button class="btn-icon" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex justify-content-center align-items-end mb-4">
+          <div>
+            <img src="{% if request.user.avatar != '' %}/media/{{ request.user.avatar }}{% else %}/static/images/avatar.png{% endif %}" id="avatar-output" class="avatar-output">
+          </div>
+          {% if request.user.avatar %}
+          <form method="post">
+            {% csrf_token %}
+            <button type="submit" name="delete_avatar" class="btn-icon ms-2"><i class="fa-solid fa-trash"></i></button>
+          </form>
+          {% endif %}
+        </div>
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="file" onchange="setAvatarURL(event)" id="avatar" name="avatar" class="form-control" accept="image/png, image/jpeg" autocomplete="off" required>
+          <button type="submit" class="btn btn-main w-100 mt-3">{{ local.s_e }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="username-modal" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0">
+      <div class="modal-header border-0">
+        <h5 class="modal-title">{{ local.u_n }}</h5>
+        <button class="btn-icon" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="mb-4">
+            <input type="text" id="username" name="username" class="form-control" value="{{ request.user.username }}" maxlength="25" placeholder="{{ local.u_n }}" autocomplete="off" required>
+            <small class="muted-color">[a-z/0-9/_]; {{ local.l_h }} > 4</small>
+          </div>
+          <button type="submit" class="btn btn-main w-100">{{ local.s_e }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function setAvatarURL(event) {
+  let image = document.getElementById('avatar-output');
+  image.src = URL.createObjectURL(event.target.files[0]);
+}  
+</script>
+{% endblock %}

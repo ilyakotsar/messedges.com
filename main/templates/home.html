@@ -1,0 +1,34 @@
+{% extends 'index.html' %}
+{% block meta %}
+<meta name="title" content="{{ local.h_e_1 }}">
+<meta name="description" content="{{ local.h_e_2 }}">
+<meta property="og:url" content="https://messedges.com">
+<meta property="og:title" content="{{ local.h_e_1 }}">
+<meta property="og:description" content="{{ local.h_e_2 }}">
+<meta property="og:image" content="/static/images/logo-bg.png">
+<meta property="og:image:width" content="400">
+<meta property="og:image:height" content="400">
+{% endblock %}
+{% block content %}
+<div class="container-xl home pt-5">
+  <div class="text-center">
+    <h1 class="fw-bold display-5">{{ local.h_e_1 }}</h1>
+    <h5 class="mt-4">{{ local.h_e_2 }}</h5>
+    <h6 class="mt-4 muted-color">{{ local.h_e_3 }}</h6>
+    <a href="/signup" class="btn btn-main mt-2">{{ local.c_a }}</a>
+  </div>
+  <div class="mt-4 muted-color">
+    <h6>1. {{ local.h_e_4 }}</h6>
+    <h6>2. {{ local.h_e_5 }}</h6>
+    <h6>3. {{ local.h_e_6 }}</h6>
+    <h6>{{ local.h_e_7 }}.</h6>
+  </div>
+  <div class="d-flex justify-content-center mt-5 mb-2">
+    <a href="https://github.com/ilyakotsar/messedges.com" target="_blank" class="btn-icon me-3"><i class="fa-brands fa-github fa-lg"></i></a>
+    <a href="https://t.me/messedges" target="_blank" class="btn-icon"><i class="fa-brands fa-telegram fa-lg"></i></a>
+  </div>
+  <div class="text-center">
+    <small class="muted-color">Created by <a href="https://github.com/ilyakotsar" target="_blank" class="link">Ilya Kotsar</a></small>
+  </div>
+</div>
+{% endblock %}

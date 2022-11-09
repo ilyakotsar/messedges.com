@@ -1,0 +1,28 @@
+{% extends 'index.html' %}
+{% block content %}
+<div class="container-xl max-width-400 pt-5 pb-5">
+  <form method="post">
+    {% csrf_token %}
+    <div class="d-flex justify-content-between align-items-end mb-4">
+      <h4 class="fw-bold m-0">{{ local.c_a }}</h4>
+      <a href="/login" class="link">{{ local.l_i }}</a>
+    </div>
+    <div class="mb-4">
+      <label for="username" class="form-label mb-1">{{ local.u_n }}</label>
+      <input type="text" id="username" name="username" class="form-control" maxlength="25" autocomplete="off" required autofocus>
+      <small class="muted-color">[a-z/0-9/_]; {{ local.l_h }} > 4</small>
+    </div>
+    <div class="mb-4">
+      <div class="d-flex justify-content-between">
+        <label for="password" class="form-label mb-1">{{ local.p_w }}</label>
+        <button type="button" onclick="switchPassword('password', 'switch-password')" id="switch-password" class="btn-icon"><i class="fa-solid fa-eye-slash fa-sm"></i></button>
+      </div>
+      <input type="password" id="password" name="password" class="form-control" maxlength="100" autocomplete="off" required>
+      <small class="muted-color">{{ local.l_h }} > 9</small>
+    </div>
+    <h6 class="muted-color"><small>{{ local.o_t_a }}</small></h6>
+    <button type="submit" class="btn btn-main w-100">{{ local.c_a }}</button>
+  </form>
+</div>
+<script src="/static/js/switch_password.js"></script>
+{% endblock %}
