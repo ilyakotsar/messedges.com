@@ -1,4 +1,6 @@
 import os
+import requests
+import hashlib
 from datetime import datetime
 from django.conf import settings
 from django.contrib.auth import authenticate, login
