@@ -40,6 +40,12 @@ body {
 .logo:hover img {
   filter: brightness(0.8);
 }
+.screenshot {
+  width: 300px;
+  height: 650px;
+  border: solid 5px #000000;
+  border-radius: 40px;
+}
 .muted-color {
   color: rgb(120, 120, 120);
 }
@@ -111,7 +117,7 @@ input, .btn-main {
 }
 .btn-main {
   text-transform: uppercase;
-  color: #483d8b;
+  color: rgb(120, 120, 120);
   background-color: rgba(72, 61, 139, 0.1);
   border-color: #483d8b;
   font-size: 18px;

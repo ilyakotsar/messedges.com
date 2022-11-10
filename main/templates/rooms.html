@@ -5,7 +5,7 @@
   <div class="row">
     <div class="col-md-4 pt-2 pb-2">
       <a href="/rooms/new" class="btn btn-main w-100">{{ local.c_r }}</a>
-      {% if used %}
+      {% if used > 0 %}
       <h6 class="mt-2 mb-0 muted-color text-end">
         <small><i class="fa-solid fa-database me-1"></i>{{ used }}%</small>
       </h6>
@@ -22,7 +22,7 @@
           </div>
           <div class="col-sm-9">
             <h2 class="fw-bold mt-1 mb-0">{{ room.recipient }}</h2>
-            {% if room.message_count %}<div class="muted-color"><small>{{ local.m_s }}: {{ room.message_count }}{% if room.unread_count %};<span class="ms-1 text-danger">{{ local.u_d }}: {{ room.unread_count }}</span>{% endif %}</small></div>{% endif %}
+            {% if room.message_count %}<div class="muted-color"><small>{{ local.m_s }}: {{ room.message_count }}{% if room.unread_count %}<span class="text-info"> + {{ room.unread_count }}</span>{% endif %}</small></div>{% endif %}
           </div>
           <div class="col-sm-1 d-flex align-items-end justify-content-end">
             <button class="btn-icon delete-room-btn" data-bs-toggle="modal" data-bs-target="#delete-room-{{ room.name }}">

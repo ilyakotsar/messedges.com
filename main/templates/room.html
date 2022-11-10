@@ -2,9 +2,9 @@
 {% block content %}
 <link rel="stylesheet" href="/static/css/room.css">
 <div class="container-xl d-flex justify-content-between room-navbar fixed-top">
-  <div class="h5 m-0">
+  <div class="d-flex align-items-center h5 m-0">
     <a href="/rooms" class="btn btn-nav me-2"><i class="fa-solid fa-arrow-left"></i></a>
-    <img src="{% if recipient.avatar != '' %}/media/{{ recipient.avatar }}{% else %}/static/images/avatar.png{% endif %}" class="rounded-circle room-avatar">
+    <img src="{% if recipient.avatar != '' %}/media/{{ recipient.avatar }}{% else %}/static/images/avatar.png{% endif %}" class="rounded-circle room-avatar me-1">
     {{ recipient.username }}
   </div>
   {% if status == 'active' %}
@@ -22,6 +22,7 @@
         <button class="btn-icon" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="modal-body">
+        {% if texts|length == 0 %}<h6 class="text-warning">{{ local.f_m_w }}</h6>{% endif %}
         <div class="mb-4">
           <div class="d-flex justify-content-end">
             <button onclick="switchPassword('private-key', 'switch-private-key')" id="switch-private-key" class="btn-icon"><i class="fa-solid fa-eye-slash fa-sm"></i></button>
@@ -37,7 +38,7 @@
 <div class="container-xl room-footer fixed-bottom">
   <div class="d-flex justify-content-center">
     <div class="input-group">
-      <input type="text" id="message" class="form-control" placeholder="{{ local.w_m }}..." maxlength="1000" autocomplete="off" autofocus>
+      <input type="text" id="message" class="form-control" placeholder="{{ local.w_m }}..." maxlength="1000" autocomplete="off">
       <button onclick="sendMessage()" id="send-message" class="btn btn-main"><i class="fa-solid fa-paper-plane"></i></button>
     </div>
   </div>

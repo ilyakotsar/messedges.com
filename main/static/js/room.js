@@ -24,6 +24,11 @@ if (texts.length > 0) {
 }
 
 setInterval(getMessages, 2000);
+window.onbeforeunload = function() {
+    if (secret_key.length > 0) {
+        return '';
+    }
+}
 window.scrollTo(0, document.body.scrollHeight);
 
 function enterPrivateKey() {

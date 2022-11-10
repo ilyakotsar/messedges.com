@@ -31,6 +31,7 @@
         <form method="post" enctype="multipart/form-data">
           {% csrf_token %}
           <input type="file" onchange="setAvatarURL(event)" id="avatar" name="avatar" class="form-control" accept="image/png, image/jpeg" autocomplete="off" required>
+          <small class="muted-color">{{ local.max_s }}: 300 x 300 px</small>
           <button type="submit" class="btn btn-main w-100 mt-3">{{ local.s_e }}</button>
         </form>
       </div>

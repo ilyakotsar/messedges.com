@@ -65,7 +65,7 @@ def rooms_context(user, context):
     if my_messages.count() > 0:
         for i in my_messages:
             length += len(i.text)
-        used = round(length * 100 / int(settings.MESSAGE_LENGTH_LIMIT))
+        used = round(length * 100 / int(settings.MESSAGE_LENGTH_LIMIT), 1)
     else:
         used = 0
     context['rooms'] = rooms

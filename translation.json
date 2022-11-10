@@ -7,6 +7,8 @@
     "h_e_5": "The first user creates the room, the second user confirms",
     "h_e_6": "Enter your private key to read, send and receive messages",
     "h_e_7": "For testing create a room for user messedges",
+    "t_b": "Enable notifications in",
+    "i_e": "send the encrypted image through regular communication channel and password through Messedges",
     "c_a": "Create an account",
     "l_i": "Log in",
     "u_n": "Username",
@@ -23,10 +25,11 @@
     "c_m": "Confirm",
     "w_g": "Waiting",
     "m_s": "Messages",
-    "u_d": "Unread",
     "d_r": "Delete room",
     "w_m": "Write a message",
-    "a_r": "Avatar"
+    "f_m_w": "It's very important to enter the private key correctly for the first messages",
+    "a_r": "Avatar",
+    "max_s": "max size"
   },
   "ru": {
     "h_e_1": "Мессенджер со сквозным шифрованием, в котором вы уверены",
@@ -36,6 +39,8 @@
     "h_e_5": "Первый пользователь создает комнату, второй пользователь подтверждает",
     "h_e_6": "Введите свой приватный ключ для чтения, отправки и получения сообщений",
     "h_e_7": "Для тестирования создайте комнату для пользователя messedges",
+    "t_b": "Включите уведомления в",
+    "i_e": "отправьте зашифрованное изображение через обычный канал связи и пароль через Messedges",
     "c_a": "Создать аккаунт",
     "l_i": "Войти",
     "u_n": "Имя пользователя",
@@ -55,6 +60,8 @@
     "u_d": "Непрочитанные",
     "d_r": "Удалить комнату",
     "w_m": "Написать сообщение",
-    "a_r": "Аватар"
+    "f_m_w": "Очень важно правильно ввести приватный ключ для первых сообщений.",
+    "a_r": "Аватар",
+    "max_s": "максимальный размер"
   }
 }
