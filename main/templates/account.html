@@ -1,12 +1,26 @@
 {% extends 'index.html' %}
 {% block content %}
-<div class="container-xl pt-5 pb-5">
+<div class="container-xl max-width-400 pt-5 pb-5">
   <div class="text-center">
     <img src="{% if request.user.avatar != '' %}/media/{{ request.user.avatar }}{% else %}/static/images/avatar.png{% endif %}" class="rounded-circle account-avatar" data-bs-toggle="modal" data-bs-target="#avatar-modal">
-    <h2 class="fw-bold pt-3 d-flex justify-content-center">
-      {{ request.user.username }}
-      <button class="btn-text ms-2" data-bs-toggle="modal" data-bs-target="#username-modal"><i class="fa-solid fa-pen"></i></button>
-    </h2>
+  </div>
+  <div class="d-flex justify-content-center pt-3">
+    <h2 class="fw-bold m-0">{{ request.user.username }}</h2>
+    <button class="btn-icon ms-2" data-bs-toggle="modal" data-bs-target="#username-modal"><i class="fa-solid fa-pen"></i></button>
+  </div>
+  <div class="d-flex justify-content-center pt-3">
+    <h5 class="m-0">{{ local.t_z }}</h5>
+    <button class="btn-icon ms-2" data-bs-toggle="modal" data-bs-target="#utc-offset-modal"><i class="fa-solid fa-pen"></i></button>
+  </div>
+  <div class="text-center pt-3">
+    <button class="btn btn-nav" data-bs-toggle="modal" data-bs-target="#password-modal">{{ local.n_p }}</button>
+    {% if request.user.telegram_connected %}
+    <br><button class="btn btn-nav mt-2" data-bs-toggle="modal" data-bs-target="#disable-telegram-modal">{{ local.d_t }}</button>
+    {% endif %}
+  </div>
+  <div class="mt-5 text-end">
+    <button class="btn btn-nav mb-2" data-bs-toggle="modal" data-bs-target="#logout-modal">{{ local.l_o }}</button><br>
+    <button class="btn btn-nav text-danger" data-bs-toggle="modal" data-bs-target="#delete-account-modal">{{ local.d_a }}</button>
   </div>
 </div>
 <div id="avatar-modal" class="modal fade" tabindex="-1">
@@ -24,7 +38,7 @@
           {% if request.user.avatar %}
           <form method="post">
             {% csrf_token %}
-            <button type="submit" name="delete_avatar" class="btn-icon ms-2"><i class="fa-solid fa-trash"></i></button>
+            <button type="submit" name="delete-avatar" class="btn-icon ms-2"><i class="fa-solid fa-trash"></i></button>
           </form>
           {% endif %}
         </div>
@@ -58,10 +72,235 @@
     </div>
   </div>
 </div>
+<div id="utc-offset-modal" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0">
+      <div class="modal-header border-0">
+        <h5 class="modal-title">{{ local.t_z }}</h5>
+        <button class="btn-icon" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="mb-4">
+            <select id="utc-offset" name="utc-offset" class="form-control form-select" autocomplete="off" required>
+              {% for i in utc_offsets %}
+              <option value="{{ i.1 }}">{{ i.0 }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <button type="submit" class="btn btn-main w-100">{{ local.s_e }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="password-modal" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0">
+      <div class="modal-header border-0">
+        <h5 class="modal-title">{{ local.n_p }}</h5>
+        <button class="btn-icon" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="mb-4">
+            <div class="text-end">
+              <button type="button" onclick="switchPassword('password', 'switch-password')" id="switch-password" class="btn-icon"><i class="fa-solid fa-eye-slash fa-sm"></i></button>
+            </div>
+            <input type="password" id="password" name="password" class="form-control" maxlength="100" placeholder="{{ local.n_p }}" autocomplete="off" required>
+            <small class="muted-color">{{ local.l_h }} > 9</small>
+          </div>
+          <button type="submit" class="btn btn-main w-100">{{ local.s_e }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="disable-telegram-modal" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0">
+      <div class="modal-header border-0">
+        <h5 class="modal-title text-danger">{{ local.d_t }}?</h5>
+        <button class="btn-icon" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form method="post">
+          {% csrf_token %}
+          <button type="submit" name="disable-telegram" class="btn btn-main w-100">{{ local.d_t }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="logout-modal" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0">
+      <div class="modal-header border-0">
+        <h5 class="modal-title">{{ local.l_o }}?</h5>
+        <button class="btn-icon" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form method="post">
+          {% csrf_token %}
+          <button type="submit" name="logout" class="btn btn-main w-100">{{ local.l_o }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="delete-account-modal" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0">
+      <div class="modal-header border-0">
+        <h5 class="modal-title text-danger">{{ local.d_a }}?</h5>
+        <button class="btn-icon" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form method="post">
+          {% csrf_token %}
+          <button type="submit" name="delete-account" class="btn btn-main w-100">{{ local.d_a }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="logout-modal" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0">
+      <div class="modal-header border-0">
+        <h5 class="modal-title">{{ local.l_o }}?</h5>
+        <button class="btn-icon" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form method="post">
+          {% csrf_token %}
+          <button type="submit" name="logout" class="btn btn-main w-100">{{ local.l_o }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="delete-account-modal" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0">
+      <div class="modal-header border-0">
+        <h5 class="modal-title text-danger">{{ local.d_a }}?</h5>
+        <button class="btn-icon" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form method="post">
+          {% csrf_token %}
+          <button type="submit" name="delete-account" class="btn btn-main w-100">{{ local.d_a }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="logout-modal" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0">
+      <div class="modal-header border-0">
+        <h5 class="modal-title">{{ local.l_o }}?</h5>
+        <button class="btn-icon" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form method="post">
+          {% csrf_token %}
+          <button type="submit" name="logout" class="btn btn-main w-100">{{ local.l_o }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="delete-account-modal" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0">
+      <div class="modal-header border-0">
+        <h5 class="modal-title text-danger">{{ local.d_a }}?</h5>
+        <button class="btn-icon" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form method="post">
+          {% csrf_token %}
+          <button type="submit" name="delete-account" class="btn btn-main w-100">{{ local.d_a }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="logout-modal" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0">
+      <div class="modal-header border-0">
+        <h5 class="modal-title">{{ local.l_o }}?</h5>
+        <button class="btn-icon" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form method="post">
+          {% csrf_token %}
+          <button type="submit" name="logout" class="btn btn-main w-100">{{ local.l_o }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="delete-account-modal" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0">
+      <div class="modal-header border-0">
+        <h5 class="modal-title text-danger">{{ local.d_a }}?</h5>
+        <button class="btn-icon" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form method="post">
+          {% csrf_token %}
+          <button type="submit" name="delete-account" class="btn btn-main w-100">{{ local.d_a }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="logout-modal" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0">
+      <div class="modal-header border-0">
+        <h5 class="modal-title">{{ local.l_o }}?</h5>
+        <button class="btn-icon" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form method="post">
+          {% csrf_token %}
+          <button type="submit" name="logout" class="btn btn-main w-100">{{ local.l_o }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="delete-account-modal" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0">
+      <div class="modal-header border-0">
+        <h5 class="modal-title text-danger">{{ local.d_a }}?</h5>
+        <button class="btn-icon" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form method="post">
+          {% csrf_token %}
+          <button type="submit" name="delete-account" class="btn btn-main w-100">{{ local.d_a }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<input type="hidden" id="utc-offset-value" value="{{ request.user.utc_offset }}">
 <script>
 function setAvatarURL(event) {
   let image = document.getElementById('avatar-output');
   image.src = URL.createObjectURL(event.target.files[0]);
-}  
+}
+document.getElementById('utc-offset').value = document.getElementById('utc-offset-value').value;
 </script>
+<script src="/static/js/switch_password.js"></script>
 {% endblock %}

@@ -8,7 +8,7 @@
     "h_e_6": "Enter your private key to read, send and receive messages",
     "h_e_7": "For testing create a room for user messedges",
     "t_b": "Enable notifications in",
-    "i_e": "send the encrypted image through regular communication channel and password through Messedges",
+    "i_e": "image encryption software. Send the encrypted image through regular communication channel and password through Messedges",
     "c_a": "Create an account",
     "l_i": "Log in",
     "u_n": "Username",
@@ -29,7 +29,12 @@
     "w_m": "Write a message",
     "f_m_w": "It's very important to enter the private key correctly for the first messages",
     "a_r": "Avatar",
-    "max_s": "max size"
+    "max_s": "max size",
+    "t_z": "Timezone",
+    "n_p": "New password",
+    "d_t": "Disable Telegram",
+    "l_o": "Log out",
+    "d_a": "Delete an account"
   },
   "ru": {
     "h_e_1": "Мессенджер со сквозным шифрованием, в котором вы уверены",
@@ -40,7 +45,7 @@
     "h_e_6": "Введите свой приватный ключ для чтения, отправки и получения сообщений",
     "h_e_7": "Для тестирования создайте комнату для пользователя messedges",
     "t_b": "Включите уведомления в",
-    "i_e": "отправьте зашифрованное изображение через обычный канал связи и пароль через Messedges",
+    "i_e": "программа для шифрования изображений. Отправьте зашифрованное изображение через обычный канал связи и пароль через Messedges",
     "c_a": "Создать аккаунт",
     "l_i": "Войти",
     "u_n": "Имя пользователя",
@@ -53,15 +58,19 @@
     "p_k": "Приватный ключ",
     "c_r": "Создать комнату",
     "r_s": "Комнаты",
-    "s_p_k": "Установите закрытый ключ",
+    "s_p_k": "Установите приватный ключ",
     "c_m": "Подтвердить",
     "w_g": "Ожидание",
     "m_s": "Сообщения",
-    "u_d": "Непрочитанные",
     "d_r": "Удалить комнату",
     "w_m": "Написать сообщение",
     "f_m_w": "Очень важно правильно ввести приватный ключ для первых сообщений.",
     "a_r": "Аватар",
-    "max_s": "максимальный размер"
+    "max_s": "максимальный размер",
+    "t_z": "Часовой пояс",
+    "n_p": "Новый пароль",
+    "d_t": "Удалить Telegram",
+    "l_o": "Выйти",
+    "d_a": "Удалить аккаунт"
   }
 }

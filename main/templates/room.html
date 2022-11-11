@@ -24,7 +24,7 @@
       <div class="modal-body">
         {% if texts|length == 0 %}<h6 class="text-warning">{{ local.f_m_w }}</h6>{% endif %}
         <div class="mb-4">
-          <div class="d-flex justify-content-end">
+          <div class="text-end">
             <button onclick="switchPassword('private-key', 'switch-private-key')" id="switch-private-key" class="btn-icon"><i class="fa-solid fa-eye-slash fa-sm"></i></button>
           </div>
           <input type="password" id="private-key" class="form-control" placeholder="{{ local.p_k }}" maxlength="500" autocomplete="off">
@@ -60,7 +60,7 @@
       <label for="set-private-key" class="form-label mb-1">{{ local.p_k }}</label>
       <button onclick="switchPassword('set-private-key', 'switch-set-private-key')" id="switch-set-private-key" class="btn-icon"><i class="fa-solid fa-eye-slash fa-sm"></i></button>
     </div>
-    <input type="password" id="set-private-key" class="form-control" maxlength="500" autocomplete="off">
+    <input type="password" id="set-private-key" class="form-control" maxlength="500" autocomplete="off" autofocus>
     <small class="muted-color">{{ local.l_h }} > 9</small>
   </div>
   <button onclick="setPublicKey()" id="set-public-key" class="btn btn-main w-100">{{ local.c_r }}</button>

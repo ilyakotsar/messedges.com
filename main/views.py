@@ -1,14 +1,16 @@
+import hashlib
 import os
 import requests
-import hashlib
 from datetime import datetime
 from django.conf import settings
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views import View
 from django.utils.decorators import method_decorator
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from main import services
 from .models import User, Room, Message
 
@@ -97,7 +99,7 @@ class AccountView(View):
         if 'avatar' in request.FILES:
             services.save_avatar(request.FILES['avatar'], user)
             return redirect(self.url_name)
-        elif 'delete_avatar' in request.POST:
+        elif 'delete-avatar' in request.POST:
             os.remove(f'{settings.BASE_DIR}/media/{str(user.avatar)}')
             user.avatar = None
             user.save()
@@ -108,28 +110,28 @@ class AccountView(View):
                 user.username = username
                 user.save()
             return redirect(self.url_name)
-        elif 'password1' in request.POST:
-            password1 = request.POST['password1']
-            password2 = request.POST['password2']
-            if len(password1) > 9 and password1 == password2:
-                user.set_password(password1)
+        elif 'password' in request.POST:
+            password = request.POST['password']
+            if len(password) > 9:
+                user.set_password(password)
                 user.save()
             return redirect(self.url_name)
-        elif 'utc_offset' in request.POST:
-            user.utc_offset = request.POST['utc_offset']
+        elif 'utc-offset' in request.POST:
+            user.utc_offset = request.POST['utc-offset']
             user.save()
             return redirect(self.url_name)
-        elif 'delete_telegram' in request.POST:
+        elif 'disable-telegram' in request.POST:
             user.telegram_link_hash = ''
             user.telegram_chat_id = ''
             user.telegram_connected = False
             user.save()
             return redirect(self.url_name)
-        elif 'delete_account' in request.POST:
+        elif 'delete-account' in request.POST:
             user.delete()
             return redirect('home')
         elif 'logout' in request.POST:
             logout(request)
+            return redirect('home')
         else:
             return redirect(self.url_name)
 
@@ -232,11 +234,26 @@ class RoomView(View):
         if user.pk == room.user1.pk or user.pk == room.user2.pk:
             data = services.get_post_data(request)
             if 'new_text' in data:
+                room_messages = Message.objects.filter(room=room).order_by('-sent')
+                if room_messages.count() == 0:
+                    h = hashlib.sha512()
+                    previous_hash = h.hexdigest()
+                elif room_messages.count() > 0:
+                    last_message = room_messages[0]
+                    h = hashlib.sha512()
+                    h.update(str(last_message.id).encode())
+                    h.update(str(last_message.room.id).encode())
+                    h.update(str(last_message.sender.id).encode())
+                    h.update(str(last_message.text).encode())
+                    h.update(str(last_message.sent).encode())
+                    h.update(str(last_message.previous_hash).encode())
+                    previous_hash = h.hexdigest()
                 new_message = Message(
                     room=room,
                     sender=user,
                     text=data['new_text'],
-                    sent=datetime.now()
+                    sent=datetime.now(),
+                    previous_hash=previous_hash
                 )
                 new_message.save()
                 sent_tz = services.format_sent(user, new_message.sent)
@@ -278,6 +295,18 @@ class RoomView(View):
             elif 'public_key' in data:
                 room.user2_public_key = data['public_key']
                 room.save()
+                if room.user1 == request.user:
+                    recipient = User.objects.get(id=room.user2.id)
+                else:
+                    recipient = User.objects.get(id=room.user1.id)
+                if recipient.telegram_connected is True:
+                    requests.post(
+                        url=f'https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage',
+                        data={
+                            'chat_id': int(recipient.telegram_chat_id),
+                            'text': f'{user.username} has set a private key for room https://messedges.com/rooms/{room.name}'
+                        }
+                    )
                 return JsonResponse({'success': True})
             else:
                 return JsonResponse({'error': True})
@@ -289,7 +318,7 @@ class RoomView(View):
 class TelegramLinkView(View):
 
     def get(self, request, link):
-        h = hashlib.sha256()
+        h = hashlib.sha512()
         h.update(link.encode())
         link_hash = h.hexdigest()
         try:
@@ -325,6 +354,22 @@ class LanguageView(View):
         if 'language' in request.POST:
             request.session['language'] = request.POST.getlist('language')[0]
             return redirect('home')
+
+
+class StatisticsView(APIView):
+    def get(self, request):
+        user_count = User.objects.all().count()
+        rooms = Room.objects.all()
+        active_rooms = 0
+        for i in rooms:
+            if i.user2_public_key != '':
+                active_rooms += 1
+        message_count = Message.objects.all().count()
+        return Response({
+            'users': user_count,
+            'rooms': active_rooms,
+            'messages': message_count
+        })
 
 
 def set_language(request, language_code):

@@ -27,7 +27,7 @@ body {
   transition: 0.1s;
 }
 .logo:hover {
-  color: rgb(120, 120, 120);
+  color: rgb(130, 130, 130);
 }
 .logo span {
   margin-top: 3px;
@@ -44,10 +44,11 @@ body {
   width: 300px;
   height: 650px;
   border: solid 5px #000000;
-  border-radius: 40px;
+  border-radius: 38px;
+  box-shadow: 0px 15px 30px #000000;
 }
 .muted-color {
-  color: rgb(120, 120, 120);
+  color: rgb(130, 130, 130);
 }
 .max-width-400 {
   max-width: 400px;
@@ -65,7 +66,7 @@ body {
   width: 130px;
   height: 130px;
   object-fit: cover;
-  border: solid 3px rgb(120, 120, 120);
+  border: solid 3px rgb(130, 130, 130);
   cursor: pointer;
   transition: 0.1s;
 }
@@ -79,23 +80,14 @@ body {
 #avatar {
   height: 37px;
 }
-.btn-nav {
-  color: rgb(220, 220, 220);
-  height: 35px;
-  min-width: 40px;
-  border: none !important;  
-}
-.btn-nav:hover {
-  background-color: rgb(30, 30, 33) !important;
-}
 .form-control {
   color: rgb(220, 220, 220) !important;
   background-color: rgb(0, 0, 3) !important;
   border-color: rgb(30, 30, 33);
-  box-shadow: none !important;
 }
 .form-control:focus {
   border-color: #483d8b;
+  box-shadow: 0px 0px 10px rgba(72, 61, 139, 0.2);
 }
 label, .form-check-input, .form-check-label {
   cursor: pointer;
@@ -112,60 +104,69 @@ label, .form-check-input, .form-check-label {
   background-color: #483d8b;
   border-color: #483d8b;
 }
-input, .btn-main {
+input::placeholder {
+  color: rgb(130, 130, 130) !important;
+}
+input, select, .btn-main {
   height: 40px;
 }
 .btn-main {
+  font-family: 'Comfortaa', cursive;
+  font-size: 16px;
   text-transform: uppercase;
-  color: rgb(120, 120, 120);
-  background-color: rgba(72, 61, 139, 0.1);
+  color: rgb(220, 220, 220);
+  background-color: rgba(72, 61, 139, 0.2);
   border-color: #483d8b;
-  font-size: 18px;
-  padding-top: 5.5px;
+  padding-top: 8px;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 .btn-main:hover, .btn-main:active, .btn-main:focus {
   color: #ffffff !important;
   background-color: #483d8b !important;
   border-color: #483d8b !important;
+  box-shadow: 0px 0px 30px rgba(72, 61, 139, 0.3);
 }
-.link {
-  color: #483d8b;
-  text-decoration: none;
+.btn-nav {
+  color: rgb(220, 220, 220);
+  height: 35px;
+  min-width: 40px;
+  border: none !important;  
 }
-.link:hover {
-  color: #483d8b;
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
+.btn-nav:hover {
+  background-color: rgb(30, 30, 33) !important;
 }
-.link:active {
-  color: #a52a2a;
-}
-.btn-icon, .btn-text {
+.btn-icon {
   border: none;
   outline: none;
   background: none;
   padding: 0px;
   transition: 0.1s;
 }
-.btn-text {
-  font-size: 14px;
-  text-transform: uppercase;
+.btn-icon {
+  color: rgb(130, 130, 130);
 }
-.btn-icon, .btn-text {
-  color: rgb(120, 120, 120);
-}
-.btn-icon:hover, .btn-text:hover {
+.btn-icon:hover {
   color: rgb(220, 220, 220);
 }
-.modal-content {
-  background-color: rgb(10, 10, 13);
+.link {
+  color: #2e8b57;
+  text-decoration: none;
+}
+.link:hover {
+  color: #2e8b57;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+}
+.link:active {
+  filter: brightness(0.8);
 }
 .modal {
   backdrop-filter: blur(1px);
   z-index: 6000;
 }
-input::placeholder {
-  color: rgb(120, 120, 120) !important;
+.modal-content {
+  background-color: rgb(10, 10, 13);
 }
 @media all and (min-width: 576px) {
   .desktop {

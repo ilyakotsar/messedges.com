@@ -4,7 +4,7 @@
   transition: 0.1s;
 }
 .rooms-card:hover {
-  background-color: rgba(72, 61, 139, 0.1);
+  background-color: rgba(72, 61, 139, 0.2);
   border-color: #483d8b;
 }
 .rooms-avatar {
@@ -28,9 +28,10 @@
 }
 #chat-body {
   margin-top: 100px;
+  padding-bottom: 10px;
 }
 .sender {
-  background-color: rgba(72, 61, 139, 0.2);
+  background-color: rgba(72, 61, 139, 0.25);
   border-radius: 20px 20px 5px 20px;
   margin-left: 30px;
 }
@@ -48,6 +49,7 @@
   padding-top: 10px;
   padding-bottom: 1px;
   margin-bottom: 10px;
+  box-shadow: 0px 3px 5px #000000;
 }
 @media all and (max-width: 575px) {
   .sender, .recipient {

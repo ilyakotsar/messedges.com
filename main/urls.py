@@ -9,6 +9,7 @@ urlpatterns = [
     path('rooms', views.RoomsView.as_view(), name='rooms'),
     path('rooms/new', views.CreateRoomView.as_view(), name='create_room'),
     path('rooms/<str:room_name>', views.RoomView.as_view(), name='room'),
+    path('api/statistics', views.StatisticsView.as_view()),
     path('tg/<str:link>', views.TelegramLinkView.as_view()),
     path('language', views.LanguageView.as_view(), name='language'),
     path('<str:language_code>', views.set_language),

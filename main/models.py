@@ -6,8 +6,8 @@ class User(AbstractUser):
     avatar = models.ImageField(upload_to='avatars', blank=True, null=True)
     username_lower = models.CharField(max_length=255, unique=True)
     utc_offset = models.CharField(max_length=6, default='0')
-    ip_hash = models.CharField(max_length=64, blank=True)
-    telegram_link_hash = models.CharField(max_length=64, blank=True)
+    ip_hash = models.CharField(max_length=128, blank=True)
+    telegram_link_hash = models.CharField(max_length=128, blank=True)
     telegram_chat_id = models.CharField(max_length=255, blank=True)
     telegram_connected = models.BooleanField(default=False)
 
@@ -38,6 +38,7 @@ class Message(models.Model):
     text = models.TextField()
     sent = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
+    previous_hash = models.CharField(max_length=128)
 
     def __str__(self):
-        return self.room.name
+        return f'{self.room.name} - {self.sender.username}'
