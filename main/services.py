@@ -140,7 +140,7 @@ def get_ip_hash(request):
         client_ip = x_forwarded_for.split(',')[0]
     else:
         client_ip = request.META.get('REMOTE_ADDR')
-    h = hashlib.sha256()
+    h = hashlib.sha512()
     h.update(client_ip.encode())
     ip_hash = h.hexdigest()
     return ip_hash

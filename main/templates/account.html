@@ -8,12 +8,9 @@
     <h2 class="fw-bold m-0">{{ request.user.username }}</h2>
     <button class="btn-icon ms-2" data-bs-toggle="modal" data-bs-target="#username-modal"><i class="fa-solid fa-pen"></i></button>
   </div>
-  <div class="d-flex justify-content-center pt-3">
-    <h5 class="m-0">{{ local.t_z }}</h5>
-    <button class="btn-icon ms-2" data-bs-toggle="modal" data-bs-target="#utc-offset-modal"><i class="fa-solid fa-pen"></i></button>
-  </div>
   <div class="text-center pt-3">
-    <button class="btn btn-nav" data-bs-toggle="modal" data-bs-target="#password-modal">{{ local.n_p }}</button>
+    <button class="btn btn-nav" data-bs-toggle="modal" data-bs-target="#utc-offset-modal">{{ local.t_z }}</button><br>
+    <button class="btn btn-nav mt-2" data-bs-toggle="modal" data-bs-target="#password-modal">{{ local.n_p }}</button>
     {% if request.user.telegram_connected %}
     <br><button class="btn btn-nav mt-2" data-bs-toggle="modal" data-bs-target="#disable-telegram-modal">{{ local.d_t }}</button>
     {% endif %}

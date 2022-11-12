@@ -266,7 +266,7 @@ class RoomView(View):
                         url=f'https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage',
                         data={
                             'chat_id': int(recipient.telegram_chat_id),
-                            'text': f'New message from {user.username}\nhttps://messedges.com/rooms/{room.name}'
+                            'text': f'New message from {user.username}'
                         }
                     )
                 return JsonResponse({'sent': sent_tz})

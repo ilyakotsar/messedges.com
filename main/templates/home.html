@@ -8,9 +8,14 @@
 <meta property="og:image" content="/static/images/logo-bg.png">
 <meta property="og:image:width" content="400">
 <meta property="og:image:height" content="400">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="https://messedges.com">
+<meta name="twitter:title" content="{{ local.h_e_1 }}">
+<meta name="twitter:description" content="{{ local.h_e_2 }}">
+<meta name="twitter:image" content="/static/images/logo-bg.png">
 {% endblock %}
 {% block content %}
-<div class="container-xl home pt-5">
+<div class="container-xl home pt-5 pb-5">
   <div class="text-center">
     <h1 class="fw-bold display-5">{{ local.h_e_1 }}</h1>
     <h5 class="mt-4">{{ local.h_e_2 }}</h5>
@@ -33,15 +38,10 @@
     <h6>2. {{ local.h_e_5 }}</h6>
     <h6>3. {{ local.h_e_6 }}</h6>
     <h6 class="muted-color">{{ local.h_e_7 }}.</h6>
-    <h6 class="pt-3 pb-2">{{ local.t_b }} <a href="https://t.me/messedges_bot" target="_blank" class="link">Telegram Bot</a>.</h6>
-    <h6><a href="https://github.com/ilyakotsar/image-encryption" target="_blank" class="link">Image Encryption</a> – {{ local.i_e }}.</h6>
-  </div>
-  <div class="d-flex justify-content-center mt-5 mb-2">
-    <a href="https://github.com/ilyakotsar/messedges.com" target="_blank" class="btn-icon me-4"><i class="fa-brands fa-github fa-lg"></i></a>
-    <a href="https://t.me/messedges" target="_blank" class="btn-icon"><i class="fa-brands fa-telegram fa-lg"></i></a>
-  </div>
-  <div class="text-center">
-    <small class="muted-color">Created by <a href="https://github.com/ilyakotsar" target="_blank" class="link">Ilya Kotsar</a></small>
+    <h6 class="pt-3">{{ local.t_b }} <a href="https://t.me/messedges_bot" target="_blank" class="link">Telegram Bot</a>.</h6>
+    <h6 class="pt-2"><a href="https://github.com/ilyakotsar/image-encryption" target="_blank" class="link">Image Encryption</a> – {{ local.i_e }}.</h6>
+    <h6 class="pt-2">Open Source: <a href="https://github.com/ilyakotsar/messedges.com" target="_blank" class="link">GitHub</a></h6>
+    <h6 class="pt-2"><a href="https://messedges.com/api/statistics" target="_blank" class="link">Statistics API</a></h6>
   </div>
 </div>
 {% endblock %}
