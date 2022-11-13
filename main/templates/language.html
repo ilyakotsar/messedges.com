@@ -19,6 +19,12 @@
           <label class="form-check-label" for="ru">Русский<span class="ms-1 muted-color">RU</span></label>
         </div>
       </div>
+      <div class="col-6 mt-2">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="language" id="jp" value="jp" {% if language == 'jp' %}checked{% endif %}>
+          <label class="form-check-label" for="jp">日本<span class="ms-1 muted-color">JP</span></label>
+        </div>
+      </div>
     </div>
     <button type="submit" class="btn btn-main w-100">{{ local.s_e }}</button>
   </form>

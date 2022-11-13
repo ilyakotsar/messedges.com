@@ -7,7 +7,9 @@
   </div>
   <div class="mb-4">
     <label for="username" class="form-label mb-1">{{ local.i_u }}</label>
-    <input type="text" id="username" name="username" class="form-control" maxlength="32" autocomplete="off" autofocus>
+    <input type="text" id="username" name="username" class="form-control" list="usernameList" oninput="getUsernames()" maxlength="25" autocomplete="off" autofocus>
+    <datalist id="usernameList">
+    </datalist>
   </div>
   <div class="mb-4">
     <div class="d-flex justify-content-between">

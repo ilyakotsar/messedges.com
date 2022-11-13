@@ -13,14 +13,14 @@ function setPublicKey() {
             headers: {'X-CSRFToken': csrf_token},
             data: {
                 public_key: public_key
-            },
+            }
         })
         .then(function (response) {
             if (response.data['success'] == true) {
                 window.location.replace('https://messedges.com/rooms/' + room_name);
             } else if (response.data['error'] == true) {
                 alert('Error')
-            }            
+            }
         });
     }
 }

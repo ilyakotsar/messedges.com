@@ -166,10 +166,22 @@ class CreateRoomView(View):
     def post(self, request):
         user = request.user
         data = services.get_post_data(request)
-        if 'username' in data:
+        if 'username_search' in data:
+            username_search = data['username_search'].lower().strip()
+            users = User.objects.all()
+            usernames = []
+            for i in users:
+                if i.username == user.username:
+                    continue
+                elif username_search in i.username_lower:
+                    usernames.append(i.username)
+            return JsonResponse({'usernames': usernames})
+        elif 'username' in data:
             try:
                 recipient = User.objects.get(username_lower=data['username'].lower().strip())
-                if Room.objects.filter(user1=user, user2=recipient).exists() or Room.objects.filter(user1=recipient, user2=user).exists():
+                if recipient.username == user.username:
+                    return JsonResponse({'error': True})
+                elif Room.objects.filter(user1=user, user2=recipient).exists() or Room.objects.filter(user1=recipient, user2=user).exists():
                     return JsonResponse({'error': True})
                 else:
                     new_room = Room(
@@ -248,11 +260,12 @@ class RoomView(View):
                     h.update(str(last_message.sent).encode())
                     h.update(str(last_message.previous_hash).encode())
                     previous_hash = h.hexdigest()
+                new_sent = datetime.now()
                 new_message = Message(
                     room=room,
                     sender=user,
                     text=data['new_text'],
-                    sent=datetime.now(),
+                    sent=new_sent,
                     previous_hash=previous_hash
                 )
                 new_message.save()
@@ -262,13 +275,15 @@ class RoomView(View):
                 else:
                     recipient = User.objects.get(id=room.user1.id)
                 if recipient.telegram_connected is True:
-                    requests.post(
-                        url=f'https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage',
-                        data={
-                            'chat_id': int(recipient.telegram_chat_id),
-                            'text': f'New message from {user.username}'
-                        }
-                    )
+                    sent_diff = new_sent - last_message.sent
+                    if round(sent_diff.seconds / 60) > 9:
+                        requests.post(
+                            url=f'https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage',
+                            data={
+                                'chat_id': int(recipient.telegram_chat_id),
+                                'text': f'New message from {user.username}'
+                            }
+                        )
                 return JsonResponse({'sent': sent_tz})
             elif 'last_sent' in data:
                 room_messages = Message.objects.filter(room=room).order_by('sent')
@@ -373,7 +388,7 @@ class StatisticsView(APIView):
 
 
 def set_language(request, language_code):
-    if language_code in ('en', 'ru'):
+    if language_code in ('en', 'ru', 'jp'):
         request.session['language'] = language_code
     return redirect('home')
 
