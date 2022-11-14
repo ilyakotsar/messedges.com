@@ -9,20 +9,21 @@
     </div>
     <div class="mb-4">
       <label for="username" class="form-label mb-1">{{ local.u_n }}</label>
-      <input type="text" id="username" name="username" class="form-control" maxlength="25" autocomplete="off" required autofocus>
-      <small class="muted-color">[a-z/0-9/_]; {{ local.l_h }} > 4</small>
+      <input type="text" oninput="inputLength('username', 'username-length')" id="username" name="username" class="form-control" maxlength="25" autocomplete="off" required autofocus>
+      <small class="muted-color">[a-z/0-9/_]; 4 < {{ local.l_h }}<span id="username-length"></span></small>
     </div>
     <div class="mb-4">
       <div class="d-flex justify-content-between">
         <label for="password" class="form-label mb-1">{{ local.p_w }}</label>
         <button type="button" onclick="switchPassword('password', 'switch-password')" id="switch-password" class="btn-icon"><i class="fa-solid fa-eye-slash fa-sm"></i></button>
       </div>
-      <input type="password" id="password" name="password" class="form-control" maxlength="100" autocomplete="off" required>
-      <small class="muted-color">{{ local.l_h }} > 9</small>
+      <input type="password" oninput="inputLength('password', 'password-length')" id="password" name="password" class="form-control" maxlength="100" autocomplete="off" required>
+      <small class="muted-color">9 < {{ local.l_h }}<span id="password-length"></span></small>
     </div>
     <h6 class="muted-color"><small>{{ local.o_t_a }}</small></h6>
     <button type="submit" class="btn btn-main w-100">{{ local.c_a }}</button>
   </form>
 </div>
+<script src="/static/js/input_length.js"></script>
 <script src="/static/js/switch_password.js"></script>
 {% endblock %}

@@ -175,7 +175,7 @@ class CreateRoomView(View):
                     continue
                 elif username_search in i.username_lower:
                     usernames.append(i.username)
-            return JsonResponse({'usernames': usernames})
+            return JsonResponse({'usernames': sorted(usernames)})
         elif 'username' in data:
             try:
                 recipient = User.objects.get(username_lower=data['username'].lower().strip())
