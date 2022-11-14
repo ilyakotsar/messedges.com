@@ -12,25 +12,6 @@ let private_key = '';
 let secret_key = '';
 let allow_get_messages = false;
 
-if (texts.length > 0) {
-    for (let i = 0; i < texts.length; i++) {
-        if (senders[i] == my_username) {
-            document.getElementById('chat-body').innerHTML += '<div class="d-flex justify-content-end"><div class="sender">' + texts[i] + '<div class="text-end muted-color"><small>' + sent[i] + '</small></div></div></div>';
-        }
-        else {
-            document.getElementById('chat-body').innerHTML += '<div class="d-flex"><div class="recipient">' + texts[i] + '<div class="text-end muted-color"><small>' + sent[i] + '</small></div></div></div>';
-        }
-    }
-}
-
-setInterval(getMessages, 2000);
-window.onbeforeunload = function() {
-    if (secret_key.length > 0) {
-        return '';
-    }
-}
-window.scrollTo(0, document.body.scrollHeight);
-
 function enterPrivateKey() {
     if (allow_get_messages == false) {
         private_key = document.getElementById('private-key').value;
@@ -181,3 +162,23 @@ document.querySelector('#private-key').onkeyup = function(e) {
         }
     }
 }
+
+window.onbeforeunload = function() {
+    if (secret_key.length > 0) {
+        return '';
+    }
+}
+
+if (texts.length > 0) {
+    for (let i = 0; i < texts.length; i++) {
+        if (senders[i] == my_username) {
+            document.getElementById('chat-body').innerHTML += '<div class="d-flex justify-content-end"><div class="sender">' + texts[i] + '<div class="text-end muted-color"><small>' + sent[i] + '</small></div></div></div>';
+        }
+        else {
+            document.getElementById('chat-body').innerHTML += '<div class="d-flex"><div class="recipient">' + texts[i] + '<div class="text-end muted-color"><small>' + sent[i] + '</small></div></div></div>';
+        }
+    }
+}
+
+setInterval(getMessages, 2000);
+window.scrollTo(0, document.body.scrollHeight);
