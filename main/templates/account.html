@@ -106,8 +106,8 @@
             <div class="text-end">
               <button type="button" onclick="switchPassword('password', 'switch-password')" id="switch-password" class="btn-icon"><i class="fa-solid fa-eye-slash fa-sm"></i></button>
             </div>
-            <input type="password" id="password" name="password" class="form-control" maxlength="100" placeholder="{{ local.n_p }}" autocomplete="off" required>
-            <small class="muted-color">{{ local.l_h }} > 9</small>
+            <input type="password" oninput="inputLength('password', 'password-length')" id="password" name="password" class="form-control" maxlength="100" placeholder="{{ local.n_p }}" autocomplete="off" required>
+            <small class="muted-color">9 < {{ local.l_h }}<span id="password-length"></span></small>
           </div>
           <button type="submit" class="btn btn-main w-100">{{ local.s_e }}</button>
         </form>

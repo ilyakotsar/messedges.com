@@ -25,12 +25,12 @@
             {% if room.message_count %}<div class="muted-color"><small>{{ local.m_s }}: {{ room.message_count }}{% if room.unread_count %}<span class="text-info"> + {{ room.unread_count }}</span>{% endif %}</small></div>{% endif %}
           </div>
           <div class="col-sm-1 d-flex align-items-end justify-content-end">
-            <button class="btn-icon delete-room-btn" data-bs-toggle="modal" data-bs-target="#delete-room-{{ room.name }}">
+            <button class="btn-icon delete-room-btn" data-bs-toggle="modal" data-bs-target="#delete-room-{{ room.name }}-modal">
               <i class="fa-solid fa-trash"></i>
             </button>
           </div>
         </div>
-        <div id="delete-room-{{ room.name }}" class="modal fade" tabindex="-1">
+        <div id="delete-room-{{ room.name }}-modal" class="modal fade" tabindex="-1">
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0">
               <div class="modal-header border-0">

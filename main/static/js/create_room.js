@@ -1,34 +1,34 @@
 const csrf_token = document.getElementById('csrf-token').value;
 
 function getUsernames() {
-    let username = document.getElementById('username').value;
-    let datalist = document.getElementById('usernameList');
-    if (username.length > 0) {
+    let username_search = document.getElementById('username').value;
+    let username_list = document.getElementById('username-list');
+    if (username_search.length > 0) {
         axios({
             method: 'post',
             url: '/rooms/new',
             headers: {'X-CSRFToken': csrf_token},
             data: {
-                username_search: username
+                username_search: username_search
             }
         })
         .then(function (response) {
-            datalist.innerHTML = '';
+            username_list.innerHTML = '';
             let usernames = response.data['usernames'];
             for (let i = 0; i < usernames.length; i++) {
                 let option = document.createElement('option');
                 option.value = usernames[i];
-                datalist.appendChild(option);
+                username_list.appendChild(option);
             }
         });
     } else {
-        datalist.innerHTML = '';
+        username_list.innerHTML = '';
     }
 }
 
 function createRoom() {
     let private_key = document.getElementById('private-key').value;
-    if (private_key.length > 0) {
+    if (private_key.length > 9) {
         let g = createRandomNumber(1000);
         let p = createRandomNumber(5000);
         let private_key_number = passwordToNumber(private_key);
