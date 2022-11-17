@@ -362,6 +362,7 @@ class LanguageView(View):
 
     def get(self, request):
         context = services.base_context(request)
+        context['languages'] = services.languages
         context['language'] = request.session.get('language', 'en')
         return render(request, self.template_name, context)
 
@@ -388,7 +389,9 @@ class StatisticsView(APIView):
 
 
 def set_language(request, language_code):
-    if language_code in ('en', 'ru', 'jp'):
+    languages = services.languages
+    language_codes = [i[0] for i in languages]
+    if language_code in language_codes:
         request.session['language'] = language_code
     return redirect('home')
 

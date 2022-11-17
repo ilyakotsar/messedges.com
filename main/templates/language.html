@@ -7,26 +7,26 @@
       <h4 class="fw-bold m-0">{{ local.l_e }}</h4>
     </div>
     <div class="row mb-4">
+      {% for i in languages %}
       <div class="col-6 mt-2">
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="language" id="en" value="en" {% if language == 'en' %}checked{% endif %}>
-          <label class="form-check-label" for="en">English<span class="ms-1 muted-color">EN</span></label>
+          <input type="radio" onclick="changeLink(this)" id="{{ i.0 }}" name="language" class="form-check-input" value="{{ i.0 }}" {% if language == i.0 %}checked{% endif %}>
+          <label class="form-check-label" for="{{ i.0 }}">{{ i.1 }}<span class="ms-1 muted-color text-uppercase">{{ i.0 }}</span></label>
         </div>
       </div>
-      <div class="col-6 mt-2">
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="language" id="ru" value="ru" {% if language == 'ru' %}checked{% endif %}>
-          <label class="form-check-label" for="ru">Русский<span class="ms-1 muted-color">RU</span></label>
-        </div>
-      </div>
-      <div class="col-6 mt-2">
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="language" id="jp" value="jp" {% if language == 'jp' %}checked{% endif %}>
-          <label class="form-check-label" for="jp">日本<span class="ms-1 muted-color">JP</span></label>
-        </div>
-      </div>
+      {% endfor %}
     </div>
     <button type="submit" class="btn btn-main w-100">{{ local.s_e }}</button>
+    <div class="mt-3 text-center">
+      <a href="https://messedges.com/en" id="langugage-link" class="link">https://messedges.com/{{ language }}</a>
+    </div>
   </form>
 </div>
+<script>
+function changeLink(radio) {
+  let link = document.getElementById('langugage-link');
+  link.href = 'https://messedges.com/' + radio.value;
+  link.innerHTML = 'https://messedges.com/' + radio.value;
+}
+</script>
 {% endblock %}

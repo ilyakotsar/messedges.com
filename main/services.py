@@ -193,6 +193,16 @@ def format_sent(user, sent):
     return f'{hour}:{minute} · {day}.{month}.{year}'
 
 
+languages = (
+    ('en', 'English'),
+    ('ru', 'Русский'),
+    ('fr', 'Français'),
+    ('de', 'Deutsch'),
+    ('es', 'Español'),
+    ('it', 'Italiano'),
+    ('jp', '日本語')
+)
+
 utc_offsets = (
     ('-12:00', '-12'),
     ('-11:00', '-11'),
