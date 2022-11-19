@@ -1,8 +1,13 @@
 {% extends 'index.html' %}
+{% load static %}
 {% block content %}
 <div class="container-xl max-width-400 pt-5 pb-5">
   <div class="text-center">
-    <img src="{% if request.user.avatar != '' %}/media/{{ request.user.avatar }}{% else %}/static/images/avatar.png{% endif %}" class="rounded-circle account-avatar" data-bs-toggle="modal" data-bs-target="#avatar-modal">
+    {% if request.user.avatar != '' %}
+    <img src="{{ request.user.avatar.url }}" class="rounded-circle account-avatar" data-bs-toggle="modal" data-bs-target="#avatar-modal">
+    {% else %}
+    <img src="{% static 'images/avatar.png' %}" class="rounded-circle account-avatar" data-bs-toggle="modal" data-bs-target="#avatar-modal">
+    {% endif %}
   </div>
   <div class="d-flex justify-content-center pt-3">
     <h2 class="fw-bold m-0">{{ request.user.username }}</h2>
@@ -299,6 +304,6 @@ function setAvatarURL(event) {
 }
 document.getElementById('utc-offset').value = document.getElementById('utc-offset-value').value;
 </script>
-<script src="/static/js/input_length.js"></script>
-<script src="/static/js/switch_password.js"></script>
+<script src="{% static 'js/input_length.js' %}"></script>
+<script src="{% static 'js/switch_password.js' %}"></script>
 {% endblock %}

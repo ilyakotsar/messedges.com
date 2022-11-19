@@ -1,11 +1,12 @@
 {% extends 'index.html' %}
+{% load static %}
 {% block content %}
 <div class="container-xl max-width-400 pt-5 pb-5">
   <form method="post">
     {% csrf_token %}  
     <div class="d-flex justify-content-between align-items-end mb-4">
       <h4 class="fw-bold m-0">{{ local.l_i }}</h4>
-      <a href="/signup" class="link">{{ local.c_a }}</a>
+      <a href="{% url 'signup' %}" class="link">{{ local.c_a }}</a>
     </div>
     <div class="mb-4">
       <label for="username" class="form-label mb-1">{{ local.u_n }}</label>
@@ -21,5 +22,5 @@
     <button type="submit" class="btn btn-main w-100">{{ local.l_i }}</button>
   </form>
 </div>
-<script src="/static/js/switch_password.js"></script>
+<script src="{% static 'js/switch_password.js' %}"></script>
 {% endblock %}

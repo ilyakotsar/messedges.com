@@ -1,10 +1,11 @@
 {% extends 'index.html' %}
+{% load static %}
 {% block content %}
-<link rel="stylesheet" href="/static/css/room.css">
+<link rel="stylesheet" href="{% static 'css/room.css' %}">
 <div class="container-xl pt-3 pb-5">
   <div class="row">
     <div class="col-md-4 pt-2 pb-2">
-      <a href="/rooms/new" class="btn btn-main w-100">{{ local.c_r }}</a>
+      <a href="{% url 'create_room' %}" class="btn btn-main w-100">{{ local.c_r }}</a>
       {% if used > 0 %}
       <h6 class="mt-2 mb-0 muted-color text-end">
         <small><i class="fa-solid fa-database me-1"></i>{{ used }}%</small>
@@ -16,9 +17,13 @@
       {% for room in rooms %}
       <div class="rooms-card mb-3 rounded">
         <div class="row align-items-center p-3 position-relative">
-          <a href="/rooms/{{ room.name }}" class="stretched-link"></a>
+          <a href="{% url 'room' room.name %}" class="stretched-link"></a>
           <div class="col-sm-2 text-center">
-            <img src="{% if room.recipient_avatar != '' %}/media/{{ room.recipient_avatar }}{% else %}/static/images/avatar.png{% endif %}" class="rounded-circle rooms-avatar">
+            {% if room.recipient_avatar != '' %}
+            <img src="/media/{{ room.recipient_avatar }}" class="rounded-circle rooms-avatar">
+            {% else %}
+            <img src="{% static 'images/avatar.png' %}" class="rounded-circle rooms-avatar">
+            {% endif %}
           </div>
           <div class="col-sm-10">
             <h2 class="fw-bold mt-1 mb-0">{{ room.recipient }}</h2>
