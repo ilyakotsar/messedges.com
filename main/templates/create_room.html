@@ -19,9 +19,9 @@
     <input type="password" oninput="inputLength('private-key', 'private-key-length')" id="private-key" class="form-control" maxlength="500" autocomplete="off">
     <small class="muted-color">9 < {{ local.l_h }}<span id="private-key-length"></span></small>
   </div>
-  <input type="hidden" id="csrf-token" value="{{ csrf_token }}">
   <button onclick="createRoom()" id="create-room" class="btn btn-main w-100">{{ local.c_r }}</button>
 </div>
+{% csrf_token %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.1.3/axios.min.js" integrity="sha512-0qU9M9jfqPw6FKkPafM3gy2CBAvUWnYVOfNPDYKVuRTel1PrciTj+a9P3loJB+j0QmN2Y0JYQmkBBS8W+mbezg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/big-integer/1.6.51/BigInteger.min.js" integrity="sha512-gHNUM5lAKXJFwUX0qjNGL5tJSoa8TTz2xUTw5COytE/p3MHy2Mivey3Gb76Blf6JfvNglTskVo5YsxDix6XIcg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="/static/js/create_room.js"></script>

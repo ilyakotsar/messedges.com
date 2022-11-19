@@ -137,6 +137,19 @@ class AccountView(View):
 
 
 @method_decorator(login_required(login_url=settings.LOGIN_URL), name='dispatch')
+class SetLastOnlineView(View):
+
+    def post(self, request):
+        data = services.get_post_data(request)
+        if 'username' in data:
+            user = User.objects.get(username=data['username'])
+            if user.username == request.user.username:
+                user.last_online = datetime.now()
+                user.save()
+                return JsonResponse({'success': True})
+
+
+@method_decorator(login_required(login_url=settings.LOGIN_URL), name='dispatch')
 class RoomsView(View):
     url_name = 'rooms'
     template_name = 'rooms.html'
@@ -369,7 +382,7 @@ class LanguageView(View):
     def post(self, request):
         if 'language' in request.POST:
             request.session['language'] = request.POST.getlist('language')[0]
-            return redirect('home')
+            return redirect(self.url_name)
 
 
 class StatisticsView(APIView):

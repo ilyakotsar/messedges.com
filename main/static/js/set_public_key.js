@@ -1,21 +1,22 @@
 function setPublicKey() {
     let private_key = document.getElementById('set-private-key').value;
     if (private_key.length > 0) {
-        const g = document.getElementById('g').value;
-        const p = document.getElementById('p').value;
+        let g = document.getElementsByName('g')[0].value;
+        let p = document.getElementsByName('p')[0].value;
         let private_key_number = passwordToNumber(private_key);
         let public_key = bigInt(g).modPow(private_key_number, p).toString();
-        const room_name = document.getElementById('room-name').value;
-        const csrf_token = document.getElementById('csrf-token').value;
+        let room_name = document.getElementsByName('room-name')[0].value;
+        let csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
         axios({
             method: 'post',
             url: '/rooms/' + room_name,
-            headers: {'X-CSRFToken': csrf_token},
+            headers: {
+                'X-CSRFToken': csrf_token
+            },
             data: {
                 public_key: public_key
             }
-        })
-        .then(function (response) {
+        }).then(function (response) {
             if (response.data['success'] == true) {
                 window.location.replace('https://messedges.com/rooms/' + room_name);
             } else if (response.data['error'] == true) {

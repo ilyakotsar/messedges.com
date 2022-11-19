@@ -21,7 +21,7 @@
   padding-top: 5px;
   padding-bottom: 5px;  
   background-color: rgba(10, 10, 13, 0.8);
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(5px);
 }
 .room-navbar {
   margin-top: 45px;

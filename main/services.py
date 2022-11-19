@@ -53,12 +53,17 @@ def rooms_context(user, context):
             recipient = User.objects.get(id=i.user1.id)
         messages = Message.objects.filter(room=i)
         unread_messages = Message.objects.filter(sender=recipient, is_read=False)
+        if recipient.last_online is not None:
+          last_online = format_sent(user, recipient.last_online)
+        else:
+          last_online = ''
         rooms.append({
             'name': i.name,
             'recipient': recipient.username,
             'recipient_avatar': str(recipient.avatar),
             'message_count': messages.count(),
-            'unread_count': unread_messages.count()
+            'unread_count': unread_messages.count(),
+            'last_online': last_online
         })
     length = 0
     my_messages = Message.objects.filter(sender=user)

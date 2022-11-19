@@ -5,6 +5,7 @@ from django.db import models
 class User(AbstractUser):
     avatar = models.ImageField(upload_to='avatars', blank=True, null=True)
     username_lower = models.CharField(max_length=255, unique=True)
+    last_online = models.DateTimeField(blank=True, null=True)
     utc_offset = models.CharField(max_length=6, default='0')
     ip_hash = models.CharField(max_length=128, blank=True)
     telegram_link_hash = models.CharField(max_length=128, blank=True)

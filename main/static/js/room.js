@@ -1,18 +1,15 @@
-const room_name = document.getElementById('room-name').value;
-const my_username = document.getElementById('my-username').value;
-const p = document.getElementById('p').value;
-const recipient_public_key = document.getElementById('recipient-public-key').value;
 const senders = JSON.parse(document.getElementById('senders').textContent);
 const texts = JSON.parse(document.getElementById('texts').textContent);
 const sent = JSON.parse(document.getElementById('sent').textContent);
-const csrf_token = document.getElementById('csrf-token').value;
-let last_sent = document.getElementById('last-sent').value;
-let available_length = document.getElementById('available-length').value;
-let private_key = '';
+let my_username = document.getElementsByName('my-username')[0].value;
+let last_sent = document.getElementsByName('last-sent')[0].value;
 let secret_key = '';
 let allow_get_messages = false;
 
 function enterPrivateKey() {
+    let p = document.getElementsByName('p')[0].value;
+    let recipient_public_key = document.getElementsByName('recipient-public-key')[0].value;
+    let private_key = '';
     if (allow_get_messages == false) {
         private_key = document.getElementById('private-key').value;
         if (private_key.length > 0) {
@@ -29,32 +26,27 @@ function enterPrivateKey() {
                         }
                         if (senders[i] == my_username) {
                             document.getElementById('chat-body').innerHTML += '<div class="d-flex justify-content-end"><div class="sender">' + plaintext + '<div class="text-end muted-color"><small>' + sent[i] + '</small></div></div></div>';
-                        }
-                        else {
+                        } else {
                             document.getElementById('chat-body').innerHTML += '<div class="d-flex"><div class="recipient">' + plaintext + '<div class="text-end muted-color"><small>' + sent[i] + '</small></div></div></div>';
                         }
                         document.getElementById('lock-btn').innerHTML = '<i class="fa-solid fa-lock-open"></i>';
                         document.getElementById('lock-btn').className = 'btn btn-nav text-success';
                         allow_get_messages = true;
                         window.scrollTo(0, document.body.scrollHeight);
-                    }
-                    else {
+                    } else {
                         secret_key = '';
                     }
                 }
-            }
-            else {
+            } else {
                 document.getElementById('lock-btn').innerHTML = '<i class="fa-solid fa-lock-open"></i>';
                 document.getElementById('lock-btn').className = 'btn btn-nav text-success';
                 allow_get_messages = true;
             }
         }
-    }
-    else {
+    } else {
         if (texts.length > 0) {
             document.getElementById('private-key').value = private_key;
-        }
-        else {
+        } else {
             private_key = document.getElementById('private-key').value;
             if (private_key.length > 0) {
                 let private_key_number = passwordToNumber(private_key);
@@ -70,46 +62,50 @@ function sendMessage() {
         let message = document.getElementById('message').value;
         if (message.trim() != '') {
             let ciphertext = CryptoJS.AES.encrypt(message, secret_key).toString();
+            let available_length = document.getElementsByName('available-length')[0].value;
             if (ciphertext.length <= available_length) {
+                let room_name = document.getElementsByName('room-name')[0].value;
+                let csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
                 axios({
                     method: 'post',
                     url: '/rooms/' + room_name,
-                    headers: {'X-CSRFToken': csrf_token},
+                    headers: {
+                        'X-CSRFToken': csrf_token
+                    },
                     data: {
                         new_text: ciphertext
                     }
-                })
-                .then(function (response) {
+                }).then(function (response) {
                     document.getElementById('chat-body').innerHTML += '<div class="d-flex justify-content-end"><div class="sender">' + message + '<div class="text-end muted-color"><small>' + response.data['sent'] + '</small></div></div></div>';
                     document.getElementById('message').value = '';
                     available_length -= ciphertext.length;
                     window.scrollTo(0, document.body.scrollHeight);
                 });
-            }
-            else {
+            } else {
                 alert('Limit is exceeded');
             }
-        }
-        else {
+        } else {
             document.getElementById('message').value = '';
         }
-    }
-    else {
+    } else {
         $('#private-key-modal').modal('show');
     }
 }
 
 function getMessages() {
     if (allow_get_messages == true) {
+        let room_name = document.getElementsByName('room-name')[0].value;
+        let csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
         axios({
             method: 'post',
             url: '/rooms/' + room_name,
-            headers: {'X-CSRFToken': csrf_token},
+            headers: {
+                'X-CSRFToken': csrf_token
+            },
             data: {
                 last_sent: last_sent
             }
-        })
-        .then(function (response) {
+        }).then(function (response) {
             if (response.data['texts']) {
                 if (response.data['texts'].length > 0) {
                     for (let i = 0; i < response.data['texts'].length; i++) {
@@ -120,11 +116,9 @@ function getMessages() {
                     }
                     last_sent = response.data['last_sent'];
                     if (!('Notification' in window)) {
-                    }
-                    else if (Notification.permission === 'granted') {
+                    } else if (Notification.permission === 'granted') {
                         let n = new Notification('New message');
-                    }
-                    else if (Notification.permission !== 'denied') {
+                    } else if (Notification.permission !== 'denied') {
                         Notification.requestPermission(function (permission) {
                             if (permission === 'granted') {
                                 let n = new Notification('New message');
@@ -147,17 +141,17 @@ function passwordToNumber(password) {
     return number;
 }
 
-document.querySelector('#message').onkeyup = function(e) {
+document.querySelector('#message').onkeyup = function(event) {
     if ($('#private-key-modal').is(':visible') == false) {
-        if (e.keyCode == 13) {
+        if (event.keyCode == 13) {
             document.getElementById('send-message').click();
         }
     }
 }
 
-document.querySelector('#private-key').onkeyup = function(e) {
+document.querySelector('#private-key').onkeyup = function(event) {
     if ($('#private-key-modal').is(':visible') == true) {
-        if (e.keyCode == 13) {
+        if (event.keyCode == 13) {
             document.getElementById('enter-private-key').click();
         }
     }
@@ -173,8 +167,7 @@ if (texts.length > 0) {
     for (let i = 0; i < texts.length; i++) {
         if (senders[i] == my_username) {
             document.getElementById('chat-body').innerHTML += '<div class="d-flex justify-content-end"><div class="sender">' + texts[i] + '<div class="text-end muted-color"><small>' + sent[i] + '</small></div></div></div>';
-        }
-        else {
+        } else {
             document.getElementById('chat-body').innerHTML += '<div class="d-flex"><div class="recipient">' + texts[i] + '<div class="text-end muted-color"><small>' + sent[i] + '</small></div></div></div>';
         }
     }
