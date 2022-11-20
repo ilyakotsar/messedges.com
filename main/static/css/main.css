@@ -159,7 +159,7 @@ input, select, .btn-main {
   text-decoration-thickness: 1px;
 }
 .link:active {
-  filter: brightness(0.8);
+  color: #d87093;
 }
 .modal {
   backdrop-filter: blur(1px);
