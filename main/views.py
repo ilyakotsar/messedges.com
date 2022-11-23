@@ -139,14 +139,11 @@ class AccountView(View):
 @method_decorator(login_required(login_url=settings.LOGIN_URL), name='dispatch')
 class SetLastOnlineView(View):
 
-    def post(self, request):
-        data = services.get_post_data(request)
-        if 'username' in data:
-            user = User.objects.get(username=data['username'])
-            if user.username == request.user.username:
-                user.last_online = datetime.now()
-                user.save()
-                return JsonResponse({'success': True})
+    def get(self, request):
+        user = User.objects.get(username=request.user.username)
+        user.last_online = datetime.now()
+        user.save()
+        return JsonResponse({'success': True})
 
 
 @method_decorator(login_required(login_url=settings.LOGIN_URL), name='dispatch')
@@ -232,13 +229,11 @@ class RoomView(View):
         user = request.user
         if room.user1 == user or room.user2 == user:
             context = services.base_context(request)
-            context['room'] = room
+            context['room_name'] = room.name
             if room.user1 == user:
                 recipient = room.user2
-                recipient_public_key = room.user2_public_key
             else:
-                recipient = room.user1
-                recipient_public_key = room.user1_public_key
+                recipient = room.user1            
             context['recipient'] = recipient
             if room.user2_public_key == '':
                 if room.user2 == user:
@@ -247,8 +242,6 @@ class RoomView(View):
                     context['status'] = 'waiting'
             else:
                 context['status'] = 'active'
-                context['recipient_public_key'] = recipient_public_key
-                context = services.room_context(user, room, context)
             return render(request, 'room.html', context)
         else:
             return redirect('rooms')
@@ -258,46 +251,53 @@ class RoomView(View):
         room = Room.objects.get(name=room_name)
         if user.pk == room.user1.pk or user.pk == room.user2.pk:
             data = services.get_post_data(request)
-            if 'new_text' in data:
-                room_messages = Message.objects.filter(room=room).order_by('-sent')
-                if room_messages.count() == 0:
-                    h = hashlib.sha512()
-                    previous_hash = h.hexdigest()
-                elif room_messages.count() > 0:
-                    last_message = room_messages[0]
-                    h = hashlib.sha512()
-                    h.update(str(last_message.id).encode())
-                    h.update(str(last_message.room.id).encode())
-                    h.update(str(last_message.sender.id).encode())
-                    h.update(str(last_message.text).encode())
-                    h.update(str(last_message.sent).encode())
-                    h.update(str(last_message.previous_hash).encode())
-                    previous_hash = h.hexdigest()
-                new_sent = datetime.now()
-                new_message = Message(
-                    room=room,
-                    sender=user,
-                    text=data['new_text'],
-                    sent=new_sent,
-                    previous_hash=previous_hash
-                )
-                new_message.save()
-                sent_tz = services.format_sent(user, new_message.sent)
-                if room.user1 == request.user:
-                    recipient = User.objects.get(id=room.user2.id)
+            if 'get_room_data' in data:
+                output = services.get_room_data(user, room)
+                return JsonResponse(output)
+            elif 'new_text' in data:
+                available_length = services.available_length(user)
+                if len(data['new_text']) <= available_length:
+                    room_messages = Message.objects.filter(room=room).order_by('-sent')
+                    if room_messages.count() == 0:
+                        h = hashlib.sha512()
+                        previous_hash = h.hexdigest()
+                    elif room_messages.count() > 0:
+                        last_message = room_messages[0]
+                        h = hashlib.sha512()
+                        h.update(str(last_message.id).encode())
+                        h.update(str(last_message.room.id).encode())
+                        h.update(str(last_message.sender.id).encode())
+                        h.update(str(last_message.text).encode())
+                        h.update(str(last_message.sent).encode())
+                        h.update(str(last_message.previous_hash).encode())
+                        previous_hash = h.hexdigest()
+                    new_sent = datetime.now()
+                    new_message = Message(
+                        room=room,
+                        sender=user,
+                        text=data['new_text'],
+                        sent=new_sent,
+                        previous_hash=previous_hash
+                    )
+                    new_message.save()
+                    sent_tz = services.format_sent(user, new_message.sent)
+                    if room.user1 == request.user:
+                        recipient = User.objects.get(id=room.user2.id)
+                    else:
+                        recipient = User.objects.get(id=room.user1.id)
+                    if recipient.telegram_connected is True:
+                        sent_diff = new_sent - last_message.sent
+                        if round(sent_diff.seconds / 60) > 9:
+                            requests.post(
+                                url=f'https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage',
+                                data={
+                                    'chat_id': int(recipient.telegram_chat_id),
+                                    'text': f'New message from {user.username}'
+                                }
+                            )
+                    return JsonResponse({'sent': sent_tz})
                 else:
-                    recipient = User.objects.get(id=room.user1.id)
-                if recipient.telegram_connected is True:
-                    sent_diff = new_sent - last_message.sent
-                    if round(sent_diff.seconds / 60) > 9:
-                        requests.post(
-                            url=f'https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage',
-                            data={
-                                'chat_id': int(recipient.telegram_chat_id),
-                                'text': f'New message from {user.username}'
-                            }
-                        )
-                return JsonResponse({'sent': sent_tz})
+                    return JsonResponse({'error': True})
             elif 'last_sent' in data:
                 room_messages = Message.objects.filter(room=room).order_by('sent')
                 if room_messages.count() > 0:
@@ -336,6 +336,8 @@ class RoomView(View):
                         }
                     )
                 return JsonResponse({'success': True})
+            elif 'parameters' in data:
+                return JsonResponse({'g': room.g, 'p': room.p})
             else:
                 return JsonResponse({'error': True})
         else:
@@ -376,7 +378,6 @@ class LanguageView(View):
     def get(self, request):
         context = services.base_context(request)
         context['languages'] = services.languages
-        context['language'] = request.session.get('language', 'en')
         return render(request, self.template_name, context)
 
     def post(self, request):

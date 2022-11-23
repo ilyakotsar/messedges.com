@@ -12,7 +12,7 @@ from PIL import Image
 from .models import User, Room, Message
 
 
-def room_context(user, room, context):
+def get_room_data(user, room):
     room_messages = Message.objects.filter(room=room).order_by('sent')
     senders, texts, sent = [], [], []
     for i in room_messages:
@@ -23,24 +23,35 @@ def room_context(user, room, context):
             i.save()
         sent_tz = format_sent(user, i.sent)
         sent.append(sent_tz)
-    length = 0
+    if room.user1 == user:
+        recipient_public_key = room.user2_public_key
+    else:
+        recipient_public_key = room.user1_public_key
+    if room_messages.count() > 0:
+        last_sent = str(room_messages[room_messages.count() - 1].sent)
+    else:
+        last_sent = ''
+    output = {}
+    output['p'] = room.p
+    output['recipient_public_key'] = recipient_public_key
+    output['senders'] = senders
+    output['texts'] = texts
+    output['sent'] = sent
+    output['last_sent'] = last_sent
+    output['my_username'] = user.username
+    return output
+
+
+def available_length(user):
     my_messages = Message.objects.filter(sender=user)
+    length = 0
     if my_messages.count() > 0:
         for i in my_messages:
             length += len(i.text)
         available_length = int(settings.MESSAGE_LENGTH_LIMIT) - length
     else:
         available_length = int(settings.MESSAGE_LENGTH_LIMIT)
-    if room_messages.count() > 0:
-        last_sent = str(room_messages[room_messages.count() - 1].sent)
-    else:
-        last_sent = ''
-    context['senders'] = senders
-    context['texts'] = texts
-    context['sent'] = sent
-    context['available_length'] = available_length
-    context['last_sent'] = last_sent
-    return context
+    return available_length
 
 
 def rooms_context(user, context):
@@ -113,6 +124,7 @@ def base_context(request):
         translation = json.loads(f.read())
     language = request.session.get('language', 'en')
     context = {}
+    context['language'] = language
     try:
         context['local'] = translation[language]
     except KeyError:

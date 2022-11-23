@@ -30,7 +30,7 @@
             <div class="d-flex justify-content-between align-items-end">
               <div class="muted-color">
                 {% if room.message_count %}<div><small>{{ local.m_s }}: {{ room.message_count }}{% if room.unread_count %}<span class="text-info"> + {{ room.unread_count }}</span>{% endif %}</small></div>{% endif %}
-                {% if room.last_online %}<div><small>{{ room.last_online }}</small></div>{% endif %}
+                {% if room.last_online %}<div><small>Last online: {{ room.last_online }}</small></div>{% endif %}
               </div>
               <button class="btn-icon delete-room-btn" data-bs-toggle="modal" data-bs-target="#delete-room-{{ room.name }}-modal">
                 <i class="fa-solid fa-trash fa-sm"></i>

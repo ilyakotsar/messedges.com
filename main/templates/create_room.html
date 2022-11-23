@@ -1,26 +1,75 @@
 {% extends 'index.html' %}
 {% load static %}
 {% block content %}
-<div class="container-xl max-width-400 pt-5 pb-5">
-  <div class="d-flex align-items-center mb-4">
+<link rel="stylesheet" href="{% static 'css/room.css' %}">
+<div class="container max-width-900 pt-5 pb-5">
+  <div class="d-flex justify-content-center align-items-center mb-4" style="margin-left: -25px;">
     <a href="{% url 'rooms' %}" class="btn btn-nav me-2"><i class="fa-solid fa-arrow-left"></i></a>
-    <h4 class="fw-bold m-0">{{ local.c_r }}</h4>
+    <h4 class="fw-bold m-0">{{ local.n_r }}</h4>
   </div>
-  <div class="mb-4">
-    <label for="username" class="form-label mb-1">{{ local.i_u }}</label>
-    <input type="text" id="username" class="form-control" list="username-list" oninput="getUsernames()" maxlength="25" autocomplete="off" autofocus>
-    <datalist id="username-list">
-    </datalist>
-  </div>
-  <div class="mb-4">
-    <div class="d-flex justify-content-between">
-      <label for="private-key" class="form-label mb-1">{{ local.p_k }}</label>
-      <button type="button" onclick="switchPassword('private-key', 'switch-private-key')" id="switch-private-key" class="btn-icon"><i class="fa-solid fa-eye-slash fa-sm"></i></button>
+  <div class="row">
+    <div class="col-md-6 pb-3">
+      <div class="container client-card p-3">
+        <h6 class="text-center pb-2">{{ local.c_t }}</h6>
+        <div class="mb-3">
+          <div class="d-flex justify-content-between">
+            <label for="private-key" class="form-label mb-1">{{ local.pr_k }}</label>
+            <button type="button" onclick="switchPassword('private-key', 'switch-private-key')" id="switch-private-key" class="btn-icon"><i class="fa-solid fa-eye-slash fa-sm"></i></button>
+          </div>
+          <input type="password" oninput="inputLength('private-key', 'private-key-length')" id="private-key" class="form-control" maxlength="500" autocomplete="off" autofocus>
+          <small class="muted-color">9 < {{ local.l_h }}<span id="private-key-length"></span></small>
+        </div>
+        <button onclick="createPublicKey()" id="create-public-key" class="btn btn-main w-100">{{ local.c_p_k }}</button>
+      </div>
     </div>
-    <input type="password" oninput="inputLength('private-key', 'private-key-length')" id="private-key" class="form-control" maxlength="500" autocomplete="off">
-    <small class="muted-color">9 < {{ local.l_h }}<span id="private-key-length"></span></small>
+    <div class="col-md-6">
+      <div class="container server-card p-3">
+        <h6 class="text-center pb-2">{{ local.s_r }}</h6>
+        <div class="mb-3">
+          {{ local.p_s }}:
+          <button class="btn btn-nav ms-1" data-bs-toggle="modal" data-bs-target="#g-modal">G</button>
+          <button class="btn btn-nav ms-1" data-bs-toggle="modal" data-bs-target="#p-modal">P</button>        
+        </div>        
+        <div class="mb-4">
+          <label for="public-key" class="form-label mb-1">{{ local.pu_k }}</label>
+          <textarea type="text" id="public-key" class="form-control" rows="2" autocomplete="off" readonly></textarea>
+        </div>
+        <div class="mb-4">
+          <label for="username" class="form-label mb-1">{{ local.i_u }}</label>
+          <input type="text" id="username" class="form-control" list="username-list" oninput="getUsernames()" maxlength="25" autocomplete="off">
+          <datalist id="username-list">
+          </datalist>
+        </div>
+        <button onclick="createRoom()" class="btn btn-main w-100">{{ local.c_r }}</button>
+      </div>
+    </div>
   </div>
-  <button onclick="createRoom()" id="create-room" class="btn btn-main w-100">{{ local.c_r }}</button>
+</div>
+<div id="g-modal" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0">
+      <div class="modal-header border-0">
+        <h5 class="modal-title">G</h5>
+        <button class="btn-icon" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <textarea type="text" id="g" class="form-control" rows="10" autocomplete="off" readonly></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="p-modal" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0">
+      <div class="modal-header border-0">
+        <h5 class="modal-title">P</h5>
+        <button class="btn-icon" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <textarea type="text" id="p" class="form-control" rows="10" autocomplete="off" readonly></textarea>
+      </div>
+    </div>
+  </div>
 </div>
 {% csrf_token %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.1.3/axios.min.js" integrity="sha512-0qU9M9jfqPw6FKkPafM3gy2CBAvUWnYVOfNPDYKVuRTel1PrciTj+a9P3loJB+j0QmN2Y0JYQmkBBS8W+mbezg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

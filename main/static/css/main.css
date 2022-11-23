@@ -53,6 +53,9 @@ body {
 .max-width-400 {
   max-width: 400px;
 }
+.max-width-900 {
+  max-width: 900px;
+}
 .pipe {
   color: rgb(30, 30, 33);
 }
@@ -159,7 +162,7 @@ input, select, .btn-main {
   text-decoration-thickness: 1px;
 }
 .link:active {
-  color: #d87093;
+  color: #0dcaf0;
 }
 .modal {
   backdrop-filter: blur(1px);
@@ -167,6 +170,7 @@ input, select, .btn-main {
 }
 .modal-content {
   background-color: rgb(10, 10, 13);
+  border-radius: 15px;
 }
 @media all and (min-width: 576px) {
   .desktop {

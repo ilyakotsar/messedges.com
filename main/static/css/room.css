@@ -1,3 +1,19 @@
+.client-card {
+  border: solid 3px rgba(25, 135, 84, 0.3);
+}
+.client-card h6 {
+  color: #198754;
+}
+.server-card {
+  border: solid 3px rgba(220, 53, 69, 0.3);  
+}
+.server-card h6 {
+  color: #dc3545;
+}
+.client-card, .server-card {
+  border-radius: 15px;
+  max-width: 420px; 
+}
 .rooms-card {
   background-color: rgb(0, 0, 3);
   border: solid 1px rgb(30, 30, 33);
